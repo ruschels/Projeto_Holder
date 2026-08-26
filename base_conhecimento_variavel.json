@@ -1,0 +1,192 @@
+{
+    "RADL3": {
+        "nome_empresa": "Raia Drogasil S.A.",
+        "setor": "Saúde",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "Dívida Líquida/EBITDA muito baixa em 0,39x; ROE forte de 18,41%; ROIC excelente de 23,18%; crescimento consistente com CAGR de Lucros em 5 anos de 22,61% e Receita de 17,14%.",
+        "pontos_de_atencao": "Margem líquida baixa (2,98%), o que é uma característica estrutural do varejo farmacêutico e exige acompanhamento constante de eficiência operacional.",
+        "observacao": "[Do you buy stocks thinking they will NEVER experience significant price drops - Snippets from Ba... [Bz4-17sfjoI].txt]\n- A cotação desabou mais de 50%, gerando pânico nos investidores, mas os fundamentos (receita subindo, lucros consistentes e dívida baixa) seguem intactos. Historicamente, a empresa já teve várias quedas de 40% a 50% e, ainda assim, entregou retornos astronômicos em prazos de 15 a 25 anos.\n"
+    },
+    "NVDA": {
+        "nome_empresa": "NVIDIA CORPORATION",
+        "setor": "Tecnologia da Informação",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "Empresa extremamente lucrativa e eficiente com ROE de 81,65%, ROIC de 75,77%, Margem Líquida de 57,57% e CAGR de Lucros de 94,33% nos últimos 5 anos. Possui forte estrutura financeira com caixa líquido expressivo (Dívida Líquida/EBITDA de -0,37).",
+        "pontos_de_atencao": "Indicadores de Valuation bastante esticados devido às altas expectativas do mercado (P/L de 33,11, P/VP de 27,04 e P/SR de 19,06), além do Dividend Yield baixo (0,13%).",
+        "observacao": "[Do you buy stocks thinking they will NEVER experience significant price drops - Snippets from Ba... [Bz4-17sfjoI].txt]\n- Caiu mais de 50% entre 2021 e 2022 (de 350 para 100) antes de ter uma das maiores altas da história recente. Ilustra a convexidade e a necessidade de suportar fortes quedas para obter retornos fora da curva.\n"
+    },
+    "MSFT": {
+        "nome_empresa": "MICROSOFT CORPORATION",
+        "setor": "Tecnologia da Informação",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "Possui caixa líquido com Dívida Líquida/EBITDA de -0,18 (Dívida Líquida de -$36,5 bilhões). Margem Líquida alta de 40,31%, ROE excelente de 30,23%, ROIC de 27,71% e CAGR de Lucros de 16,90% nos últimos 5 anos.",
+        "pontos_de_atencao": "Valuation elevado com P/L de 26,89 e P/VP de 8,13, além dos riscos inerentes à exposição cambial e mercado internacional.",
+        "observacao": "[Do you buy stocks thinking they will NEVER experience significant price drops - Snippets from Ba... [Bz4-17sfjoI].txt]\n- Ficou 15 anos estagnada e com narrativas de que estava acabada antes de ter uma alta expressiva. Exemplo de que empresas excelentes passam por longos períodos ruins.\n"
+    },
+    "AAPL": {
+        "nome_empresa": "APPLE INC.",
+        "setor": "Tecnologia da Informação",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "Dívida Líquida/EBITDA de 0,13; ROE de 119,91%; ROIC de 67,20%; Margem Líquida de 27,62%; CAGR de Lucros (5 anos) de 14,30% e CAGR de Receitas (5 anos) de 8,68%.",
+        "pontos_de_atencao": "Múltiplos de valuation elevados (P/L de 36,08 e P/VP de 43,26), além do risco inerente do setor de tecnologia e cadeia global de suprimentos.",
+        "observacao": "[Do you buy stocks thinking they will NEVER experience significant price drops - Snippets from Ba... [Bz4-17sfjoI].txt]\n- Chegou a ter prejuízo e queda de 75% na cotação no passado, antes de entregar um retorno de mais de 80.000%.\n"
+    },
+    "FLRY3": {
+        "nome_empresa": "Fleury S.A.",
+        "setor": "Saúde",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "Dívida Líquida/EBITDA controlada em 1,25; ROE de 13,00%; ROIC de 10,58%; Margem Líquida de 8,01%; crescimento expressivo nos últimos 5 anos com CAGR de Receitas de 22,78% e CAGR de Lucros de 22,34%.",
+        "pontos_de_atencao": "Dívida Líquida em valor absoluto de R$ 3,51 bilhões e margem líquida moderada (8,01%). Requer atenção contínua na integração de aquisições e novas emissões de dívida.",
+        "observacao": "[Do you buy stocks thinking they will NEVER experience significant price drops - Snippets from Ba... [Bz4-17sfjoI].txt]\n- Passou por cerca de 7 anos com quedas consecutivas de lucros e cotação antes de retomar o crescimento e subir fortemente.\n"
+    },
+    "KO": {
+        "nome_empresa": "COCA-COLA COMPANY",
+        "setor": "Consumo não Cíclico / Bebidas",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "ROE de 42,59%, ROIC de 13,42%, Margem Líquida de 27,80%, Margem EBIT de 26,80%, CAGR de Lucros (5 anos) de 11,09% e Dívida Líquida/EBIT de 2,25 (indicando Dívida Líquida/EBITDA ainda menor e inferior ao limite de 3).",
+        "pontos_de_atencao": "Valuation esticado com P/L de 28,23 e P/VP de 12,02. Dívida líquida elevada em termos absolutos ($29,68 bilhões, com Dívida Líquida/PL de 0,92), embora controlada em relação à geração operacional.",
+        "observacao": "[Do you buy stocks thinking they will NEVER experience significant price drops - Snippets from Ba... [Bz4-17sfjoI].txt]\n- Ficou cerca de 10 anos de lado em dois momentos distintos de sua história, apesar de ser uma das ações mais lucrativas da carteira de Warren Buffett.\n"
+    },
+    "HD": {
+        "nome_empresa": "HOME DEPOT INC.",
+        "setor": "Bens Industriais",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": false,
+        "resumo_numeros": "LPA de $14,92; ROE de 122,76%; Margem Líquida de 8,84%; pagamentos regulares e crescentes de dividendos trimestrais.",
+        "pontos_de_atencao": "Alavancagem elevada com Dívida Líquida/PL em 3,69 e Passivos/Ativos em 0,89 (89% do ativo comprometido); indicador Dívida Líquida/EBITDA não informado no texto; distorções nos dados de CAGR de lucros/receitas de 5 anos.",
+        "observacao": "[Do you buy stocks thinking they will NEVER experience significant price drops - Snippets from Ba... [Bz4-17sfjoI].txt]\n- Ficou 13 anos com cotação de lado ou caindo antes de entregar mais de 50.000% de retorno em 30 anos.\n"
+    },
+    "WMT": {
+        "nome_empresa": "WALMART INC.",
+        "setor": "Consumo não Cíclico",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "Dívida Líquida/EBITDA em 0,98; ROE de 24,10%; ROIC de 17,04%; CAGR de Lucros nos últimos 5 anos de 338,46%; Margem Líquida de 3,18%; P/L de 37,89.",
+        "pontos_de_atencao": "Valuation esticado com P/L próximo de 38; margem líquida estreita (3,18%), característica do setor varejista; liquidez corrente abaixo de 1 (0,77).",
+        "observacao": "[Do you buy stocks thinking they will NEVER experience significant price drops - Snippets from Ba... [Bz4-17sfjoI].txt]\n- Passou 17 anos com a cotação andada de lado antes de ter uma grande valorização.\n"
+    },
+    "ADBE": {
+        "nome_empresa": "ADOBE INC.",
+        "setor": "Tecnologia da Informação",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "Dívida Líquida/EBITDA extremamente baixa em 0,10x; Margem Líquida elevada de 28,69%; ROE espetacular de 62,76% e ROIC de 41,24%; CAGR de Lucros em 5 anos de 6,27% e Receitas em 13,06%.",
+        "pontos_de_atencao": "Liquidez corrente abaixo de 1 (0,75); não paga dividendos desde 2005 (foco total em reinvestimento ou recompras).",
+        "observacao": "[Do you buy stocks thinking they will NEVER experience significant price drops - Snippets from Ba... [Bz4-17sfjoI].txt]\n- Ficou 15 anos de lado antes de disparar e subir mais de 1000%.\n"
+    },
+    "BBAS3": {
+        "nome_empresa": "Banco do Brasil S.A.",
+        "setor": "Financeiro e Outros / Intermediários Financeiros / Bancos",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "Listada no Novo Mercado com 100% de Tag Along e apenas ações ON. ROE de 8,27%, P/L de 6,73 e P/VP de 0,56. CAGR de lucros em 5 anos de 2,97% e CAGR de receitas em 5 anos de 26,49%. Patrimônio Líquido de R$ 186,08 bilhões e disponibilidades de R$ 65,02 bilhões.",
+        "pontos_de_atencao": "Sociedade de economia mista (estatal), sujeita a riscos de interferência política. Notícia recente mencionando abertura de processo da CVM contra a presidente do banco.",
+        "observacao": "[Do you buy stocks thinking they will NEVER experience significant price drops - Snippets from Ba... [Bz4-17sfjoI].txt]\n- Citada brevemente como exemplo de empresa cuja queda de cotação o palestrante nem acompanha no dia a dia.\n"
+    },
+    "WEGE3": {
+        "nome_empresa": "WEG S.A.",
+        "setor": "Bens Industriais",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "Listada no Novo Mercado com 100% de Tag Along. Apresenta caixa líquido (Dívida Líquida/EBITDA de -0,42), alta rentabilidade com ROE de 33,16% e ROIC de 25,73%, margem líquida de 15,58% e sólido histórico de crescimento (CAGR de Lucros de 21,72% e Receitas de 18,49% em 5 anos).",
+        "pontos_de_atencao": "Múltiplos de valuation historicamente altos (P/L em 32,68 e P/VP em 10,84), o que exige cautela com o preço pago de entrada.",
+        "observacao": "[Do you buy stocks thinking they will NEVER experience significant price drops - Snippets from Ba... [Bz4-17sfjoI].txt]\n- Mencionada como exemplo de empresa excelente ('vegu') em que muitos investidores sentem dificuldade por ela crescer e pesar muito na carteira.\n"
+    },
+    "ITUB3": {
+        "nome_empresa": "Itaú Unibanco Holding S.A.",
+        "setor": "Financeiro e Outros / Intermediários Financeiros / Bancos",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "ROE de 21,50%, Margem Líquida de 12,13%, CAGR Lucros (5 anos) de 19,90% e CAGR Receitas (5 anos) de 17,38%. P/L de 9,85 e P/VP de 2,12.",
+        "pontos_de_atencao": "Segmento de listagem Nível 1 (não é Novo Mercado) e Tag Along de 80% para ações ON.",
+        "observacao": ""
+    },
+    "EGIE3": {
+        "nome_empresa": "Engie Brasil Energia S.A.",
+        "setor": "Utilidade Pública / Energia Elétrica",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "Listada no Novo Mercado com Tag Along de 100%. Apresenta ROE forte de 26,37%, Margem Líquida alta de 28,94% e Margem EBITDA de 66,98%. O CAGR de Lucros nos últimos 5 anos é de 7,20% e a relação Dívida Líquida/EBITDA é de 2,71x.",
+        "pontos_de_atencao": "A alavancagem financeira com Dívida Líquida/EBITDA em 2,71x requer atenção, apesar de ser um patamar tolerável e comum para o setor de energia intensivo em capital. Ignorar variações de cotação de curto prazo e oscilações do Dividend Yield.",
+        "observacao": ""
+    },
+    "ABEV3": {
+        "nome_empresa": "AMBEV S.A.",
+        "setor": "Consumo não Cíclico / Bebidas / Cervejas e Refrigerantes",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "A empresa possui caixa líquido com relação Dívida Líquida/EBITDA de -0,44 e Dívida Líquida de R$ -15,39 bilhões. Apresenta alta rentabilidade com ROE de 18,40%, ROIC de 21,55% e Margem Líquida de 18,41%. Mostra crescimento constante com CAGR de lucros de 7,38% e de receita de 8,61% nos últimos 5 anos.",
+        "pontos_de_atencao": "Tag Along de apenas 80%, apesar de ser negociada via ações ordinárias (ON), pois não está listada no segmento Novo Mercado.",
+        "observacao": ""
+    },
+    "LREN3": {
+        "nome_empresa": "Lojas Renner S.A.",
+        "setor": "Consumo Cíclico / Comércio / Tecidos, Vestuário e Calçados",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "Empresa com Caixa Líquido (Dívida Líquida/EBITDA de -0,26 e Dívida Líquida de -R$ 1,16 bilhão). Apresenta ROE de 14,41%, ROIC de 12,61%, Margem Bruta de 61,99% e Margem Líquida de 9,35%. Crescimento de receitas (CAGR 5 anos) em 16,00% e lucros em 6,39%.",
+        "pontos_de_atencao": "Setor de varejo/consumo cíclico sensível a juros elevados e volatilidade macroeconômica. Alerta recente sobre deterioração de crédito no setor de varejo e financiamento ao consumidor (Realize CFI).",
+        "observacao": ""
+    },
+    "GRND3": {
+        "nome_empresa": "GRENDENE S.A.",
+        "setor": "Consumo Cíclico",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "Listada no Novo Mercado com Tag Along de 100%. Possui Caixa Líquido expressivo (Dívida Líquida/EBITDA de -0,87 e Dívida Líquida de R$ -356 milhões). Indicadores sólidos com ROE de 18,04%, Margem Líquida de 22,71% e CAGR de Lucros nos últimos 5 anos de 7,41%.",
+        "pontos_de_atencao": "Atua no setor de Consumo Cíclico (Calçados), exposto à volatilidade da economia e concorrência no segmento têxtil/vestuário. O ROIC de 7,80% é inferior ao ROE.",
+        "observacao": ""
+    },
+    "TSLA": {
+        "nome_empresa": "TESLA INC.",
+        "setor": "Consumo Cíclico / Automóveis e Motocicletas",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "A empresa possui caixa líquido expressivo de US$ 34,18 bilhões (Dívida Líquida/EBITDA de -2,84). Apresenta bom histórico de crescimento de longo prazo com CAGR de Receitas em 5 anos de 24,63% e CAGR de Lucros de 40,62%. ROE em 4,38% e Margem Líquida em 3,67%.",
+        "pontos_de_atencao": "Valuation extremamente esticado com P/L em 362,29 e EV/EBITDA em 111,80, indicando alta expectativa já precificada. Margem líquida comprimida (3,67%) e volatilidade bastante elevada no ativo.",
+        "observacao": ""
+    },
+    "ITSA4": {
+        "nome_empresa": "Itaúsa S.A.",
+        "setor": "Financeiro e Outros / Intermediários Financeiros / Bancos",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "P/L: 7,97; P/VP: 1,54; Dividend Yield: 8,81%; ROE: 19,36%; ROIC: 17,33%; Dívida Líquida/EBITDA: 0,20; Dívida Líquida/PL: 0,04; Liquidez Corrente: 2,00; CAGR Lucros (5 anos): 20,81%.",
+        "pontos_de_atencao": "Tag Along de 80% para as ações PN (ITSA4); Segmento de listagem Nível 1 (fora do Novo Mercado); Concentração elevada nos resultados vindos do Itaú Unibanco.",
+        "observacao": ""
+    },
+    "IVV": {
+        "nome_empresa": "IVV (iShares Core S&P 500 ETF)",
+        "setor": "ETF / Mercado Internacional",
+        "tem_acao_ordinaria_ON": false,
+        "lucros_consistentes": false,
+        "divida_equilibrada": false,
+        "resumo_numeros": "Dados indisponíveis. O texto retornado é uma página de erro do StatusInvest (OPS... Não encontramos o que você está procurando).",
+        "pontos_de_atencao": "Página do ticker não foi encontrada no StatusInvest ou o conteúdo fornecido não carrega as informações do ativo IVV.",
+        "observacao": ""
+    }
+}

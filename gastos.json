@@ -1,0 +1,50 @@
+[
+    {
+        "id": "173a3679-2bfc-4ade-9d85-ad7f50284294",
+        "date": "14/08/2026 13:43",
+        "type": "Receita",
+        "description": "Salário",
+        "category": "Salário",
+        "amount": 7050.0
+    },
+    {
+        "id": "7e847e21-bacd-4ddf-ba3a-5e0499977abb",
+        "date": "14/08/2026 13:44",
+        "type": "Despesa",
+        "description": "Moradia",
+        "category": "Moradia",
+        "amount": 1700.0
+    },
+    {
+        "id": "41dce7c7-b0e5-496d-92f0-5e3ea3b7f136",
+        "date": "14/08/2026 13:53",
+        "type": "Despesa",
+        "description": "Faculdade",
+        "category": "Educação",
+        "amount": 300.0
+    },
+    {
+        "id": "560198ac-38d2-42ca-89d3-2e8f8e969341",
+        "date": "17/08/2026 09:35",
+        "type": "Despesa",
+        "description": "Passagem",
+        "category": "Transporte",
+        "amount": 100.0
+    },
+    {
+        "id": "2478e151-8d53-49bf-8e50-f5f6a9669b51",
+        "date": "17/08/2026 10:04",
+        "type": "Despesa",
+        "description": "Mercado",
+        "category": "Compras",
+        "amount": 1600.0
+    },
+    {
+        "id": "9d0e7ef9-9a85-4ed7-8365-144d01ecf356",
+        "date": "17/08/2026 11:09",
+        "type": "Despesa",
+        "description": "Streaming",
+        "category": "Lazer",
+        "amount": 100.0
+    }
+]
