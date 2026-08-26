@@ -15,11 +15,26 @@ from google.genai import types
 import yfinance as yf
 
 # ==========================================
+# CONFIGURAÇÕES DE SEGURANÇA E CHAVES
+# ==========================================
+# ==========================================
+# CONFIGURAÇÕES DE SEGURANÇA E CHAVES
+# ==========================================
+def carregar_secrets():
+    """Lê as chaves de API do arquivo oculto local"""
+    try:
+        with open("secrets.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {"API_GEMINI": "CHAVE_NAO_ENCONTRADA"}
+
+SECRETS = carregar_secrets()
+API_GEMINI = SECRETS.get("API_GEMINI", "")
+MODELO_GEMINI = "gemini-1.5-flash"
+
+# ==========================================
 # CONFIGURAÇÕES DA PÁGINA (DESIGN NATIVO)
 # ==========================================
-API_GEMINI = #API DO GEMINI AQUI
-MODELO_GEMINI = "gemini-3.6-flash"
-
 st.set_page_config(
     page_title="Holder System #PAS", 
     layout="wide", 
@@ -27,57 +42,12 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Mantemos apenas o ajuste do espaçamento superior para aproveitar melhor a tela
 st.markdown("""
 <style>
     .block-container {
         padding-top: 2rem;
         padding-bottom: 2rem;
-    }
-    
-    /* Estilos Globais e Tipografia */
-    .main {
-        background-color: #f8fafc;
-        font-family: 'Inter', sans-serif;
-    }
-    
-    /* Cartões Modernos */
-    .st-emotion-cache-1r6slb0, .css-1r6slb0 {
-        background-color: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    }
-
-    /* Botões Customizados */
-    .stButton>button {
-        border-radius: 8px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    .stButton>button:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    /* Inputs e Seletores */
-    .stTextInput>div>div>input, .stSelectbox>div>div>select, .stNumberInput>div>div>input {
-        border-radius: 8px;
-        border: 1px solid #cbd5e1;
-    }
-
-    /* Sidebar Refinada */
-    section[data-testid="stSidebar"] {
-        background-color: #0f172a;
-        color: #f8fafc;
-    }
-    section[data-testid="stSidebar"] .stRadio label {
-        color: #cbd5e1 !important;
-        font-weight: 500;
-    }
-    section[data-testid="stSidebar"] .stRadio label:hover {
-        color: #ffffff !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -85,6 +55,7 @@ st.markdown("""
 # ==========================================
 # ESTRUTURA DE DIRETÓRIOS E ARQUIVOS JSON
 # ==========================================
+
 PASTAS = ["pdfs_balancos", "pdfs_filosofia", "Legenda"]
 for p in PASTAS:
     os.makedirs(p, exist_ok=True)
@@ -164,9 +135,14 @@ def chamar_gemini_com_retry(prompt, forcar_json=False, status_container=None, ma
                     
     raise Exception("Falha de conexão em todas as rotas. Tente novamente.")
 
-def raspar_dados_statusinvest(ticker, base_variavel, log_container=None):
+def raspar_dados_statusinvest(ticker, base_variavel, log_container=None, is_etf_us=False):
     eh_br = any(char.isdigit() for char in ticker)
-    url = f"https://statusinvest.com.br/acoes/{ticker.lower()}" if eh_br else f"https://statusinvest.com.br/acoes/eua/{ticker.lower()}"
+    
+    # Define a URL baseada na marcação do usuário ou no formato do ticker
+    if is_etf_us:
+        url = f"https://statusinvest.com.br/etf/eua/{ticker.lower()}" 
+    else:
+        url = f"https://statusinvest.com.br/acoes/{ticker.lower()}" if eh_br else f"https://statusinvest.com.br/acoes/eua/{ticker.lower()}"
     
     chrome_options = Options()
     chrome_options.add_argument("--headless")
@@ -439,6 +415,10 @@ elif menu == "🌐 6. Raspagem StatusInvest":
     with st.container(border=True):
         st.write("Extraia automaticamente os lucros e dívidas direto do site StatusInvest.")
         tickers = st.text_input("Tickers separados por vírgula", placeholder="Ex: WEGE3, AAPL, ITUB3")
+        
+        # A caixinha de marcação entra aqui
+        is_etf = st.checkbox("Marcador de ETF", help="Marque esta opção se os tickers inseridos acima forem ETFs do mercado americano (ex: AVUV, AVLV).")
+        
         if st.button("🚀 Iniciar Raspagem", type="primary") and tickers:
             lista = [t.strip().upper() for t in tickers.split(",") if t.strip()]
             prog = st.progress(0)
@@ -446,7 +426,10 @@ elif menu == "🌐 6. Raspagem StatusInvest":
             base = carregar_json("base_conhecimento_variavel.json")
             for i, t in enumerate(lista):
                 log.info(f"Raspando {t}...")
-                raspar_dados_statusinvest(t, base, log)
+                
+                # Passamos o valor da caixinha (True/False) para a função
+                raspar_dados_statusinvest(t, base, log, is_etf_us=is_etf)
+                
                 prog.progress((i + 1) / len(lista))
             log.success("🎉 Raspagem concluída! Verifique as empresas na Aba 5.")
 
@@ -844,7 +827,7 @@ elif menu == "💼 9. Minha Carteira":
     st.divider()
 
     # ---------------------------------------------------------
-    # DASHBOARD DETALHADO (Semáforo)
+    # DASHBOARD DETALHADO (Semáforo e Gráficos Internos)
     # ---------------------------------------------------------
     def cor_alvo(atual, alvo):
         if atual < alvo - 1.0: return "🔴 Para trás (Aportar)"
@@ -863,13 +846,38 @@ elif menu == "💼 9. Minha Carteira":
             st.markdown(f"**Macro:** Atual {atual_macro:.1f}% | Alvo **{alvo_macro:.1f}%** ➔ {cor_alvo(atual_macro, alvo_macro)}")
             st.divider()
             
-            soma_alvos_internos = 0.0
             if carteira["rv_br"]:
+                visao_br = st.radio("Distribuição Interna:", ["Atual (Em R$)", "Alvo (Em %)"], horizontal=True, key="visao_br")
+                
+                df_br_atual = []
+                df_br_alvo = []
+                soma_alvos_internos = 0.0
+                
+                for tick, qtd in carteira["rv_br"].items():
+                    valor_total = precos_br[tick] * qtd
+                    alvo_micro = carteira["alvos_ativos"]["rv_br"].get(tick, 0.0)
+                    soma_alvos_internos += alvo_micro
+                    
+                    df_br_atual.append({"Ativo": tick, "Valor": valor_total})
+                    df_br_alvo.append({"Ativo": tick, "Percentual": alvo_micro})
+                
+                # Gráfico Interno BR
+                if visao_br == "Atual (Em R$)":
+                    fig_br = px.pie(pd.DataFrame(df_br_atual), values="Valor", names="Ativo", hole=0.55)
+                else:
+                    fig_br = px.pie(pd.DataFrame(df_br_alvo), values="Percentual", names="Ativo", hole=0.55)
+                    
+                fig_br.update_traces(textposition='inside', textinfo='percent+label', showlegend=False)
+                fig_br.update_layout(margin=dict(t=10, b=10, l=10, r=10), height=300)
+                st.plotly_chart(fig_br, width="stretch")
+                
+                st.divider()
+                
+                # Detalhamento em Texto
                 for tick, qtd in carteira["rv_br"].items():
                     valor_total = precos_br[tick] * qtd
                     atual_micro = (valor_total / subtotal_rv_br * 100) if subtotal_rv_br > 0 else 0.0
                     alvo_micro = carteira["alvos_ativos"]["rv_br"].get(tick, 0.0)
-                    soma_alvos_internos += alvo_micro
                     
                     st.markdown(f"**{tick}**: {atual_micro:.1f}% (Alvo: {alvo_micro:.1f}%) ➔ {cor_alvo(atual_micro, alvo_micro)}")
                     st.caption(f"{qtd} ações | Total: R$ {valor_total:,.2f}")
@@ -887,13 +895,38 @@ elif menu == "💼 9. Minha Carteira":
             st.markdown(f"**Macro:** Atual {atual_macro:.1f}% | Alvo **{alvo_macro:.1f}%** ➔ {cor_alvo(atual_macro, alvo_macro)}")
             st.divider()
             
-            soma_alvos_internos = 0.0
             if carteira["rv_us"]:
+                visao_us = st.radio("Distribuição Interna:", ["Atual (Em US$)", "Alvo (Em %)"], horizontal=True, key="visao_us")
+                
+                df_us_atual = []
+                df_us_alvo = []
+                soma_alvos_internos = 0.0
+                
+                for tick, qtd in carteira["rv_us"].items():
+                    valor_total_usd = precos_us[tick] * qtd
+                    alvo_micro = carteira["alvos_ativos"]["rv_us"].get(tick, 0.0)
+                    soma_alvos_internos += alvo_micro
+                    
+                    df_us_atual.append({"Ativo": tick, "Valor": valor_total_usd})
+                    df_us_alvo.append({"Ativo": tick, "Percentual": alvo_micro})
+                
+                # Gráfico Interno Exterior
+                if visao_us == "Atual (Em US$)":
+                    fig_us = px.pie(pd.DataFrame(df_us_atual), values="Valor", names="Ativo", hole=0.55)
+                else:
+                    fig_us = px.pie(pd.DataFrame(df_us_alvo), values="Percentual", names="Ativo", hole=0.55)
+                    
+                fig_us.update_traces(textposition='inside', textinfo='percent+label', showlegend=False)
+                fig_us.update_layout(margin=dict(t=10, b=10, l=10, r=10), height=300)
+                st.plotly_chart(fig_us, width="stretch")
+                
+                st.divider()
+                
+                # Detalhamento em Texto
                 for tick, qtd in carteira["rv_us"].items():
                     valor_total_usd = precos_us[tick] * qtd
                     atual_micro = (valor_total_usd / subtotal_us_usd * 100) if subtotal_us_usd > 0 else 0.0
                     alvo_micro = carteira["alvos_ativos"]["rv_us"].get(tick, 0.0)
-                    soma_alvos_internos += alvo_micro
                     
                     st.markdown(f"**{tick}**: {atual_micro:.1f}% (Alvo: {alvo_micro:.1f}%) ➔ {cor_alvo(atual_micro, alvo_micro)}")
                     st.caption(f"{qtd} ações | Total: US$ {valor_total_usd:,.2f}")
@@ -934,6 +967,7 @@ elif menu == "💼 9. Minha Carteira":
             else:
                 st.write("Sem exposição.")
 
+                
     # Resumo Final do Patrimônio
     st.divider()
     st.markdown(f"<h2 style='text-align: center; color: #0284c7;'>Patrimônio Total Estimado: R$ {total_patrimonio:,.2f}</h2>", unsafe_allow_html=True)

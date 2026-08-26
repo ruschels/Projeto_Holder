@@ -1,0 +1,8 @@
+streamlit
+pandas
+plotly
+pypdf
+beautifulsoup4
+selenium
+google-genai
+yfinance

@@ -180,13 +180,23 @@
         "observacao": ""
     },
     "IVV": {
-        "nome_empresa": "IVV (iShares Core S&P 500 ETF)",
-        "setor": "ETF / Mercado Internacional",
+        "nome_empresa": "ISHARES CORE S&P 500 ETF",
+        "setor": "ETF / Fundos de Índices",
         "tem_acao_ordinaria_ON": false,
-        "lucros_consistentes": false,
-        "divida_equilibrada": false,
-        "resumo_numeros": "Dados indisponíveis. O texto retornado é uma página de erro do StatusInvest (OPS... Não encontramos o que você está procurando).",
-        "pontos_de_atencao": "Página do ticker não foi encontrada no StatusInvest ou o conteúdo fornecido não carrega as informações do ativo IVV.",
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "Cotação atual de $ 770,05, acumulando valorização de 18,51% nos últimos 12 meses. Distribuição constante de dividendos trimestrais (ex: $ 1,9960 em junho/26 e $ 1,7835 em março/26).",
+        "pontos_de_atencao": "Trata-se de um ETF que replica o índice S&P 500, e não uma empresa individual. O investidor está exposto ao risco de mercado amplo dos EUA e à variação cambial.",
+        "observacao": ""
+    },
+    "RENT3": {
+        "nome_empresa": "Localiza Rent a Car S.A.",
+        "setor": "Consumo Cíclico / Aluguel de carros",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "Cotação: R$ 35,40 | P/L: 11,64 | P/VP: 1,47 | DY: 5,89% | ROE: 12,63% | ROIC: 11,56% | Dívida Líquida/EBITDA: 2,18x | CAGR Lucros (5a): 26,71%",
+        "pontos_de_atencao": "Modelo de negócio altamente intensivo em capital com dívida bruta elevada (R$ 44,6 bilhões), o que gera forte sensibilidade a variações na taxa de juros (Selic) e depende do desempenho na revenda de seminovos.",
         "observacao": ""
     }
 }
