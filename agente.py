@@ -17,19 +17,22 @@ import yfinance as yf
 # ==========================================
 # CONFIGURAÇÕES DE SEGURANÇA E CHAVES
 # ==========================================
-# ==========================================
-# CONFIGURAÇÕES DE SEGURANÇA E CHAVES
-# ==========================================
-def carregar_secrets():
-    """Lê as chaves de API do arquivo oculto local"""
+
+def carregar_chave_api():
+    """Tenta carregar a chave da nuvem do Streamlit; se falhar, busca no arquivo local"""
+    # 1. Tenta buscar no ambiente do Streamlit Cloud
+    if "API_GEMINI" in st.secrets:
+        return st.secrets["API_GEMINI"]
+        
+    # 2. Se não encontrar (ambiente de desenvolvimento), busca no JSON local
     try:
         with open("secrets.json", "r", encoding="utf-8") as f:
-            return json.load(f)
+            secrets_locais = json.load(f)
+            return secrets_locais.get("API_GEMINI", "CHAVE_NAO_ENCONTRADA")
     except FileNotFoundError:
-        return {"API_GEMINI": "CHAVE_NAO_ENCONTRADA"}
+        return "CHAVE_NAO_ENCONTRADA"
 
-SECRETS = carregar_secrets()
-API_GEMINI = SECRETS.get("API_GEMINI", "")
+API_GEMINI = carregar_chave_api()
 MODELO_GEMINI = "gemini-3.6-flash"
 
 # ==========================================
