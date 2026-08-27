@@ -201,12 +201,22 @@
     },
     "VALE3": {
         "nome_empresa": "Vale S.A.",
-        "setor": "Materiais Básicos",
+        "setor": "Materiais Básicos / Mineração / Minerais Metálicos",
         "tem_acao_ordinaria_ON": true,
         "lucros_consistentes": false,
         "divida_equilibrada": true,
-        "resumo_numeros": "Cotação: R$ 79,07 | DY: 7,11% | P/L: 33,81 | P/VP: 1,78 | ROE: 5,27% | Margem Líquida: 4,75% | Dívida Líquida/EBITDA: 0,88 | Tag Along: 100%",
-        "pontos_de_atencao": "Empresa altamente cíclica (commodities) com CAGR de lucros em 5 anos negativo (-17,24%), margem líquida (4,75%) e ROE (5,27%) baixos no período analisado, além do histórico grave de passivos socioambientais associado ao rompimento de barragens.",
+        "resumo_numeros": "P/L de 33,91, P/VP de 1,79, DY de 7,09%, Margem Líquida de 4,75%, ROE de 5,27% e Dívida Líquida/EBITDA saudável de 0,88.",
+        "pontos_de_atencao": "Ciclicidade extrema do minério de ferro, CAGR de Lucros em 5 anos negativo (-17,24%), margens e rentabilidade atualmente comprimidas (ROE 5,27%) e passivos jurídicos/ambientais decorrentes dos acidentes de Brumadinho e Mariana.",
+        "observacao": ""
+    },
+    "PETR3": {
+        "nome_empresa": "Petróleo Brasileiro S.A. Petrobras",
+        "setor": "Petróleo, Gás e Biocombustíveis",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": true,
+        "divida_equilibrada": true,
+        "resumo_numeros": "P/L de 4,53; P/VP de 1,26; Dividend Yield de 7,13%; ROE de 27,73%; Margem Líquida de 24,32%; Dívida Líquida/EBITDA de 0,79; CAGR de Lucros nos últimos 5 anos de 79,75%.",
+        "pontos_de_atencao": "Empresa estatal exposta a forte risco político e interferência governamental; alta dependência da volatilidade dos preços do petróleo no mercado internacional; histórico passado de problemas de governança; liquidez corrente ligeiramente abaixo do ideal (0,85).",
         "observacao": ""
     }
 }
