@@ -198,5 +198,15 @@
         "resumo_numeros": "Cotação: R$ 35,40 | P/L: 11,64 | P/VP: 1,47 | DY: 5,89% | ROE: 12,63% | ROIC: 11,56% | Dívida Líquida/EBITDA: 2,18x | CAGR Lucros (5a): 26,71%",
         "pontos_de_atencao": "Modelo de negócio altamente intensivo em capital com dívida bruta elevada (R$ 44,6 bilhões), o que gera forte sensibilidade a variações na taxa de juros (Selic) e depende do desempenho na revenda de seminovos.",
         "observacao": ""
+    },
+    "VALE3": {
+        "nome_empresa": "Vale S.A.",
+        "setor": "Materiais Básicos",
+        "tem_acao_ordinaria_ON": true,
+        "lucros_consistentes": false,
+        "divida_equilibrada": true,
+        "resumo_numeros": "Cotação: R$ 79,07 | DY: 7,11% | P/L: 33,81 | P/VP: 1,78 | ROE: 5,27% | Margem Líquida: 4,75% | Dívida Líquida/EBITDA: 0,88 | Tag Along: 100%",
+        "pontos_de_atencao": "Empresa altamente cíclica (commodities) com CAGR de lucros em 5 anos negativo (-17,24%), margem líquida (4,75%) e ROE (5,27%) baixos no período analisado, além do histórico grave de passivos socioambientais associado ao rompimento de barragens.",
+        "observacao": ""
     }
 }
