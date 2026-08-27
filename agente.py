@@ -791,7 +791,8 @@ elif menu == "💼 9. Minha Carteira":
             if st.button("Restaurar Dados", type="primary", use_container_width=True):
                 if arquivo_upload is not None:
                     try:
-                        dados_restaurados = json.load(arquivo_upload)
+                        conteudo = arquivo_upload.getvalue().decode("utf-8")
+                        dados_restaurados = json.loads(conteudo)
                         if "alvos_macro" in dados_restaurados:
                             salvar_json("carteira.json", dados_restaurados)
                             st.success("✅ Backup restaurado com sucesso! Atualizando...")
