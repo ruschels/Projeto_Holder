@@ -30,7 +30,7 @@ def carregar_secrets():
 
 SECRETS = carregar_secrets()
 API_GEMINI = SECRETS.get("API_GEMINI", "")
-MODELO_GEMINI = "gemini-1.5-flash"
+MODELO_GEMINI = "gemini-3.6-flash"
 
 # ==========================================
 # CONFIGURAÇÕES DA PÁGINA (DESIGN NATIVO)
@@ -94,7 +94,7 @@ def salvar_json(caminho, dados):
         json.dump(dados, f, ensure_ascii=False, indent=4)
 
 def chamar_gemini_com_retry(prompt, forcar_json=False, status_container=None, max_tentativas_por_modelo=3, delay_segundos=4):
-    modelos_fallback = [MODELO_GEMINI, "gemini-3.6-flash", "gemini-1.5-flash-8b", "gemini-1.5-pro"]
+    modelos_fallback = [MODELO_GEMINI, "gemini-3.6-flash", "gemini-2.5-flash", "gemini-1.5-pro"]
     client = genai.Client(api_key=API_GEMINI)
     
     # Se a função for chamada sem um container visual, cria um temporário
