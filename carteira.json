@@ -1,18 +1,20 @@
 {
     "rv_br": {
-        "RADL3": 2.0,
+        "RADL3": 17.0,
         "WEGE3": 4.0,
         "ITUB3": 0.0,
-        "EGIE3": 0.0,
+        "EGIE3": 10.0,
         "ABEV3": 3.0,
-        "GRND3": 0.0,
+        "GRND3": 86.0,
         "BBAS3": 0.0,
         "FLRY3": 0.0,
-        "ITSA4": 60.0
+        "ITSA4": 60.0,
+        "RENT3": 9.0,
+        "VALE3": 4.0
     },
     "rv_us": {},
     "rf_br": {
-        "Caixinha": 18412.0
+        "Caixinha": 19422.0
     },
     "btc": 0.0,
     "alvos_macro": {
@@ -31,7 +33,9 @@
             "GRND3": 10.0,
             "BBAS3": 10.0,
             "FLRY3": 10.0,
-            "ITSA4": 0.0
+            "ITSA4": 0.0,
+            "RENT3": 10.0,
+            "VALE3": 10.0
         },
         "rv_us": {}
     }
