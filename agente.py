@@ -18,7 +18,6 @@ import yfinance as yf
 # CONFIGURAÇÕES DE SEGURANÇA E CHAVES
 # ==========================================
 
-
 def carregar_chave_api():
     """Verifica o arquivo JSON local primeiro; se não achar (nuvem), usa o st.secrets"""
     # 1. Tenta ler o JSON local primeiro (Ambiente de Desenvolvimento)
@@ -333,17 +332,14 @@ elif menu == "🤖 3. Consultar Agente":
                 st.markdown(f"> {resp}")
                 
     else:
-        # AQUI ENTRA A MÁGICA NOVA: A leitura de todo o sistema
         pergunta = st.text_input("Qual é a sua dúvida?", placeholder="Ex: Com base na minha carteira alvo, onde devo aportar hoje?")
         
         if st.button("Perguntar ao Agente", type="primary") and pergunta:
             
-            # 1. O agente "lê" as outras abas carregando os dados JSON do seu disco
             dados_carteira = carregar_json("carteira.json")
             dados_empresas = carregar_json("base_conhecimento_variavel.json")
             dados_gastos = carregar_json("gastos.json")
             
-            # 2. Construímos o "Cenário Atual" empacotando os dados
             contexto_sistema = f"""
             ESTADO ATUAL DO SISTEMA DO USUÁRIO:
             
@@ -357,7 +353,6 @@ elif menu == "🤖 3. Consultar Agente":
             {json.dumps(dados_gastos, ensure_ascii=False)}
             """
             
-            # 3. Juntamos a Filosofia + Cenário Atual + Pergunta do Usuário em um único prompt gigante
             prompt = f"""
             Você é o Cérebro Holder, um consultor financeiro brutalmente honesto, focado em Buy and Hold e paz de espírito (#PAS).
             
@@ -412,6 +407,51 @@ elif menu == "📝 4. Transcrições YouTube":
 elif menu == "🏢 5. Visualizar Empresas":
     st.header("🏢 Diretório de Empresas Cadastradas")
     base_var = carregar_json("base_conhecimento_variavel.json")
+
+    # ---------------------------------------------------------
+    # BACKUP E RESTAURAÇÃO DA BASE DE EMPRESAS
+    # ---------------------------------------------------------
+    with st.expander("💾 Backup & Restauração de Empresas", expanded=False):
+        st.write("Salve uma cópia de segurança da sua base de empresas raspadas ou faça o upload de um arquivo local para a nuvem.")
+        col_b1, col_b2 = st.columns(2, gap="large")
+        
+        with col_b1:
+            st.subheader("⬇️ Exportar Backup")
+            json_str_empresas = json.dumps(base_var, ensure_ascii=False, indent=4)
+            data_atual = datetime.now().strftime('%Y%m%d')
+            st.download_button(
+                label="Baixar base_conhecimento_variavel.json",
+                data=json_str_empresas,
+                file_name=f"backup_empresas_{data_atual}.json",
+                mime="application/json",
+                use_container_width=True
+            )
+            
+        with col_b2:
+            st.subheader("⬆️ Importar Backup")
+            arquivo_upload_empresas = st.file_uploader("Selecione o arquivo .json", type=["json"], key="upload_empresas", label_visibility="collapsed")
+            if st.button("Restaurar Base de Empresas", type="primary", use_container_width=True):
+                if arquivo_upload_empresas is not None:
+                    sucesso_emp = False
+                    try:
+                        conteudo_emp = arquivo_upload_empresas.getvalue().decode("utf-8")
+                        dados_restaurados_emp = json.loads(conteudo_emp)
+                        
+                        # Verifica se é um dicionário (formato padrão da base)
+                        if isinstance(dados_restaurados_emp, dict):
+                            salvar_json("base_conhecimento_variavel.json", dados_restaurados_emp)
+                            sucesso_emp = True
+                        else:
+                            st.error("❌ Arquivo inválido. Certifique-se de usar um backup da base de empresas.")
+                    except:
+                        st.error("❌ Erro ao ler o arquivo. Formato corrompido.")
+                        
+                    if sucesso_emp:
+                        st.success("✅ Base de empresas restaurada com sucesso! Atualizando...")
+                        time.sleep(1.5)
+                        st.rerun()
+
+    st.divider()
     
     if base_var:
         def boa(d): return d.get('lucros_consistentes', False) and d.get('divida_equilibrada', False)
@@ -465,7 +505,6 @@ elif menu == "🌐 6. Raspagem StatusInvest":
         st.write("Extraia automaticamente os lucros e dívidas direto do site StatusInvest.")
         tickers = st.text_input("Tickers separados por vírgula", placeholder="Ex: WEGE3, AAPL, ITUB3")
         
-        # A caixinha de marcação entra aqui
         is_etf = st.checkbox("Marcador de ETF", help="Marque esta opção se os tickers inseridos acima forem ETFs do mercado americano (ex: AVUV, AVLV).")
         
         if st.button("🚀 Iniciar Raspagem", type="primary") and tickers:
@@ -476,7 +515,6 @@ elif menu == "🌐 6. Raspagem StatusInvest":
             for i, t in enumerate(lista):
                 log.info(f"Raspando {t}...")
                 
-                # Passamos o valor da caixinha (True/False) para a função
                 raspar_dados_statusinvest(t, base, log, is_etf_us=is_etf)
                 
                 prog.progress((i + 1) / len(lista))
@@ -630,10 +668,16 @@ elif menu == "💡 8. Ideias de Conteúdo":
 elif menu == "💼 9. Minha Carteira":
     st.header("💼 Minha Carteira Alvo (#PAS)")
     
+    def atualizar_quantidade(classe, ticker, key_widget):
+        """Atualiza o JSON no momento exato em que o usuário digita na caixinha"""
+        nova_qtd = st.session_state[key_widget]
+        carteira_temp = carregar_json("carteira.json")
+        carteira_temp[classe][ticker] = nova_qtd
+        salvar_json("carteira.json", carteira_temp)
+    
     carteira = carregar_json("carteira.json")
     base_var = carregar_json("base_conhecimento_variavel.json")
     
-    # --- Atualização de Estrutura do JSON ---
     if "alvos_macro" not in carteira:
         carteira["alvos_macro"] = {"rv_br": 45.0, "rv_us": 45.0, "rf_br": 0.0, "btc": 10.0}
     if "alvos_ativos" not in carteira:
@@ -643,7 +687,7 @@ elif menu == "💼 9. Minha Carteira":
     opcoes_us = [t for t in base_var.keys() if not any(c.isdigit() for c in t)]
     
     # ---------------------------------------------------------
-    # PAINEL 1: CONFIGURAR ALVOS MACRO (GRANDES ÁREAS)
+    # PAINEL 1: CONFIGURAR ALVOS MACRO
     # ---------------------------------------------------------
     with st.expander("🎯 Configurar Alvos Macro (Grandes Áreas)", expanded=False):
         st.write("Defina o percentual ideal de cada classe. A soma deve ser exatamente 100%.")
@@ -720,7 +764,7 @@ elif menu == "💼 9. Minha Carteira":
                     st.rerun()
 
     # ---------------------------------------------------------
-    # PAINEL 3: FAZER APORTE (SOMAR QUANTIDADE)
+    # PAINEL 3: FAZER APORTE
     # ---------------------------------------------------------
     with st.expander("💸 Fazer Aporte (Registrar Compra)", expanded=False):
         st.write("Acabou de comprar? Registre aqui a quantidade física de ativos adquiridos para somar à sua carteira.")
@@ -767,7 +811,7 @@ elif menu == "💼 9. Minha Carteira":
                     st.warning("Insira uma quantidade maior que zero.")
 
     # ---------------------------------------------------------
-    # PAINEL 4: BACKUP E RESTAURAÇÃO
+    # PAINEL 4: BACKUP E RESTAURAÇÃO DA CARTEIRA
     # ---------------------------------------------------------
     with st.expander("💾 Backup & Restauração", expanded=False):
         st.write("Salve uma cópia de segurança de toda a sua configuração de carteira ou restaure um arquivo antigo.")
@@ -788,7 +832,7 @@ elif menu == "💼 9. Minha Carteira":
         with col_b2:
             st.subheader("⬆️ Importar Backup")
             arquivo_upload = st.file_uploader("Selecione o arquivo .json", type=["json"], label_visibility="collapsed")
-            if st.button("Restaurar Dados", type="primary", use_container_width=True):
+            if st.button("Restaurar Dados da Carteira", type="primary", use_container_width=True):
                 if arquivo_upload is not None:
                     sucesso = False
                     try:
@@ -803,7 +847,6 @@ elif menu == "💼 9. Minha Carteira":
                     except:
                         st.error("❌ Erro ao ler o arquivo. Formato corrompido.")
                         
-                    # O recarregamento da página acontece fora do "try/except" para não ser bloqueado
                     if sucesso:
                         st.success("✅ Backup restaurado com sucesso! Atualizando...")
                         time.sleep(1.5)
@@ -833,7 +876,6 @@ elif menu == "💼 9. Minha Carteira":
     
     subtotal_rf = sum(carteira.get("rf_br", {}).values())
     
-    # Correção do Erro do Bitcoin (Buscando em USD e convertendo para BRL)
     qtd_btc = carteira.get("btc", 0.0)
     try:
         preco_btc_usd = yf.Ticker("BTC-USD").fast_info['lastPrice']
@@ -860,7 +902,6 @@ elif menu == "💼 9. Minha Carteira":
         "Valor": [subtotal_rv_br, subtotal_us_brl, subtotal_rf, subtotal_btc]
     })
     
-    # Paleta de cores para manter os gráficos sincronizados: Verde (BR), Azul (Exterior), Amarelo (RF), Laranja (BTC)
     CORES = ['#10b981', '#3b82f6', '#facc15', '#f97316'] 
     
     col_graf1, col_graf2 = st.columns(2)
@@ -929,24 +970,21 @@ elif menu == "💼 9. Minha Carteira":
                 
                 st.divider()
                 
-                # Detalhamento em Texto
+                # Detalhamento em Texto com edição instantânea
                 for tick, qtd in carteira["rv_br"].items():
                     valor_total = precos_br[tick] * qtd
                     atual_micro = (valor_total / subtotal_rv_br * 100) if subtotal_rv_br > 0 else 0.0
                     alvo_micro = carteira["alvos_ativos"]["rv_br"].get(tick, 0.0)
                     
-                    # Colocamos o Nome e a Caixinha na mesma linha de colunas [3, 1]
                     c1, c2 = st.columns([3, 1])
                     with c1:
                         st.markdown(f"**{tick}**: {atual_micro:.1f}% (Alvo: {alvo_micro:.1f}%) ➔ {cor_alvo(atual_micro, alvo_micro)}")
                         st.caption(f"Total: R$ {valor_total:,.2f}")
                     with c2:
-                        # Mudamos a chave para "qtd_br" para forçar a limpeza do cache fantasma
-                        nova_qtd = st.number_input("Qtd", min_value=0.0, value=float(qtd), step=1.0, key=f"qtd_br_{tick}", label_visibility="collapsed")
-                        if nova_qtd != float(qtd):
-                            carteira["rv_br"][tick] = nova_qtd
-                            salvar_json("carteira.json", carteira)
-                            st.rerun()
+                        chave = f"w_br_{tick}"
+                        st.number_input("Qtd", min_value=0.0, value=float(qtd), step=1.0, key=chave, 
+                                        on_change=atualizar_quantidade, args=("rv_br", tick, chave), 
+                                        label_visibility="collapsed")
                 
                 st.info(f"Subtotal: R$ {subtotal_rv_br:,.2f} | Soma Alvos Internos: {soma_alvos_internos:.1f}%")
             else:
@@ -988,7 +1026,7 @@ elif menu == "💼 9. Minha Carteira":
                 
                 st.divider()
                 
-                # Detalhamento em Texto
+                # Detalhamento em Texto com edição instantânea
                 for tick, qtd in carteira["rv_us"].items():
                     valor_total_usd = precos_us[tick] * qtd
                     atual_micro = (valor_total_usd / subtotal_us_usd * 100) if subtotal_us_usd > 0 else 0.0
@@ -999,11 +1037,10 @@ elif menu == "💼 9. Minha Carteira":
                         st.markdown(f"**{tick}**: {atual_micro:.1f}% (Alvo: {alvo_micro:.1f}%) ➔ {cor_alvo(atual_micro, alvo_micro)}")
                         st.caption(f"Total: US$ {valor_total_usd:,.2f}")
                     with c2:
-                        nova_qtd = st.number_input("Qtd", min_value=0.0, value=float(qtd), step=1.0, key=f"qtd_us_{tick}", label_visibility="collapsed")
-                        if nova_qtd != float(qtd):
-                            carteira["rv_us"][tick] = nova_qtd
-                            salvar_json("carteira.json", carteira)
-                            st.rerun()
+                        chave = f"w_us_{tick}"
+                        st.number_input("Qtd", min_value=0.0, value=float(qtd), step=1.0, key=chave, 
+                                        on_change=atualizar_quantidade, args=("rv_us", tick, chave), 
+                                        label_visibility="collapsed")
                 
                 st.info(f"Subtotal: US$ {subtotal_us_usd:,.2f} (~R$ {subtotal_us_brl:,.2f}) | Soma Alvos Internos: {soma_alvos_internos:.1f}%")
             else:
@@ -1040,9 +1077,3 @@ elif menu == "💼 9. Minha Carteira":
                 st.info(f"Subtotal: R$ {subtotal_btc:,.2f}")
             else:
                 st.write("Sem exposição.")
-
-                
-    # Resumo Final do Patrimônio
-    st.divider()
-    st.markdown(f"<h2 style='text-align: center; color: #0284c7;'>Patrimônio Total Estimado: R$ {total_patrimonio:,.2f}</h2>", unsafe_allow_html=True)
-    st.caption(f"Cotação do Dólar utilizada para conversão: R$ {usd_rate:.2f}")
