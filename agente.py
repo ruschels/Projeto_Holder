@@ -790,18 +790,24 @@ elif menu == "💼 9. Minha Carteira":
             arquivo_upload = st.file_uploader("Selecione o arquivo .json", type=["json"], label_visibility="collapsed")
             if st.button("Restaurar Dados", type="primary", use_container_width=True):
                 if arquivo_upload is not None:
+                    sucesso = False
                     try:
                         conteudo = arquivo_upload.getvalue().decode("utf-8")
                         dados_restaurados = json.loads(conteudo)
+                        
                         if "alvos_macro" in dados_restaurados:
                             salvar_json("carteira.json", dados_restaurados)
-                            st.success("✅ Backup restaurado com sucesso! Atualizando...")
-                            time.sleep(1.5)
-                            st.rerun()
+                            sucesso = True
                         else:
                             st.error("❌ Arquivo inválido. Certifique-se de usar um backup do sistema.")
                     except:
                         st.error("❌ Erro ao ler o arquivo. Formato corrompido.")
+                        
+                    # O recarregamento da página acontece fora do "try/except" para não ser bloqueado
+                    if sucesso:
+                        st.success("✅ Backup restaurado com sucesso! Atualizando...")
+                        time.sleep(1.5)
+                        st.rerun()
 
     st.divider()
 
