@@ -323,10 +323,49 @@ elif menu == "🤖 3. Consultar Agente":
                 st.markdown(f"> {resp}")
                 
     else:
-        pergunta = st.text_input("Qual é a sua dúvida?", placeholder="Ex: O que fazer quando o balanço vem ruim?")
-        if st.button("Perguntar", type="primary") and pergunta:
-            prompt = f"Responda à dúvida do usuário com base rigorosa na filosofia: {base_filo[:10000]}\n\nDúvida: {pergunta}"
-            with st.spinner("Consultando pergaminhos..."):
+        # AQUI ENTRA A MÁGICA NOVA: A leitura de todo o sistema
+        pergunta = st.text_input("Qual é a sua dúvida?", placeholder="Ex: Com base na minha carteira alvo, onde devo aportar hoje?")
+        
+        if st.button("Perguntar ao Agente", type="primary") and pergunta:
+            
+            # 1. O agente "lê" as outras abas carregando os dados JSON do seu disco
+            dados_carteira = carregar_json("carteira.json")
+            dados_empresas = carregar_json("base_conhecimento_variavel.json")
+            dados_gastos = carregar_json("gastos.json")
+            
+            # 2. Construímos o "Cenário Atual" empacotando os dados
+            contexto_sistema = f"""
+            ESTADO ATUAL DO SISTEMA DO USUÁRIO:
+            
+            [CARTEIRA ALVO E POSIÇÕES ATUAIS]
+            {json.dumps(dados_carteira, ensure_ascii=False)}
+            
+            [EMPRESAS MONITORADAS E FUNDAMENTOS]
+            {json.dumps(dados_empresas, ensure_ascii=False)}
+            
+            [CONTROLE DE GASTOS (POUPAMÊS)]
+            {json.dumps(dados_gastos, ensure_ascii=False)}
+            """
+            
+            # 3. Juntamos a Filosofia + Cenário Atual + Pergunta do Usuário em um único prompt gigante
+            prompt = f"""
+            Você é o Cérebro Holder, um consultor financeiro brutalmente honesto, focado em Buy and Hold e paz de espírito (#PAS).
+            
+            REGRAS DE CONDUTA:
+            - Baseie-se ESTRITAMENTE na filosofia abaixo.
+            - Analise o ESTADO ATUAL DO SISTEMA para dar uma resposta 100% personalizada e matemática.
+            - Se o usuário perguntar onde aportar, olhe a carteira alvo dele, veja o que está mais para trás e recomende o aporte naquilo, desde que a empresa tenha lucros consistentes na base de fundamentos.
+            
+            FILOSOFIA BASE: 
+            {base_filo[:10000]}
+            
+            {contexto_sistema}
+            
+            DÚVIDA DO USUÁRIO: 
+            {pergunta}
+            """
+            
+            with st.spinner("Analisando seus balanços, sua carteira e consultando a filosofia..."):
                 resp = chamar_gemini_com_retry(prompt)
                 st.info(resp)
 
