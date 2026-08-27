@@ -935,13 +935,14 @@ elif menu == "💼 9. Minha Carteira":
                     atual_micro = (valor_total / subtotal_rv_br * 100) if subtotal_rv_br > 0 else 0.0
                     alvo_micro = carteira["alvos_ativos"]["rv_br"].get(tick, 0.0)
                     
-                    st.markdown(f"**{tick}**: {atual_micro:.1f}% (Alvo: {alvo_micro:.1f}%) ➔ {cor_alvo(atual_micro, alvo_micro)}")
-                    
-                    c1, c2 = st.columns([3, 2])
+                    # Colocamos o Nome e a Caixinha na mesma linha de colunas [3, 1]
+                    c1, c2 = st.columns([3, 1])
                     with c1:
+                        st.markdown(f"**{tick}**: {atual_micro:.1f}% (Alvo: {alvo_micro:.1f}%) ➔ {cor_alvo(atual_micro, alvo_micro)}")
                         st.caption(f"Total: R$ {valor_total:,.2f}")
                     with c2:
-                        nova_qtd = st.number_input("Qtd", min_value=0.0, value=float(qtd), step=1.0, key=f"edit_br_{tick}", label_visibility="collapsed")
+                        # Mudamos a chave para "qtd_br" para forçar a limpeza do cache fantasma
+                        nova_qtd = st.number_input("Qtd", min_value=0.0, value=float(qtd), step=1.0, key=f"qtd_br_{tick}", label_visibility="collapsed")
                         if nova_qtd != float(qtd):
                             carteira["rv_br"][tick] = nova_qtd
                             salvar_json("carteira.json", carteira)
@@ -993,13 +994,12 @@ elif menu == "💼 9. Minha Carteira":
                     atual_micro = (valor_total_usd / subtotal_us_usd * 100) if subtotal_us_usd > 0 else 0.0
                     alvo_micro = carteira["alvos_ativos"]["rv_us"].get(tick, 0.0)
                     
-                    st.markdown(f"**{tick}**: {atual_micro:.1f}% (Alvo: {alvo_micro:.1f}%) ➔ {cor_alvo(atual_micro, alvo_micro)}")
-                    
-                    c1, c2 = st.columns([3, 2])
+                    c1, c2 = st.columns([3, 1])
                     with c1:
+                        st.markdown(f"**{tick}**: {atual_micro:.1f}% (Alvo: {alvo_micro:.1f}%) ➔ {cor_alvo(atual_micro, alvo_micro)}")
                         st.caption(f"Total: US$ {valor_total_usd:,.2f}")
                     with c2:
-                        nova_qtd = st.number_input("Qtd", min_value=0.0, value=float(qtd), step=1.0, key=f"edit_us_{tick}", label_visibility="collapsed")
+                        nova_qtd = st.number_input("Qtd", min_value=0.0, value=float(qtd), step=1.0, key=f"qtd_us_{tick}", label_visibility="collapsed")
                         if nova_qtd != float(qtd):
                             carteira["rv_us"][tick] = nova_qtd
                             salvar_json("carteira.json", carteira)
