@@ -936,7 +936,16 @@ elif menu == "💼 9. Minha Carteira":
                     alvo_micro = carteira["alvos_ativos"]["rv_br"].get(tick, 0.0)
                     
                     st.markdown(f"**{tick}**: {atual_micro:.1f}% (Alvo: {alvo_micro:.1f}%) ➔ {cor_alvo(atual_micro, alvo_micro)}")
-                    st.caption(f"{qtd} ações | Total: R$ {valor_total:,.2f}")
+                    
+                    c1, c2 = st.columns([3, 2])
+                    with c1:
+                        st.caption(f"Total: R$ {valor_total:,.2f}")
+                    with c2:
+                        nova_qtd = st.number_input("Qtd", min_value=0.0, value=float(qtd), step=1.0, key=f"edit_br_{tick}", label_visibility="collapsed")
+                        if nova_qtd != float(qtd):
+                            carteira["rv_br"][tick] = nova_qtd
+                            salvar_json("carteira.json", carteira)
+                            st.rerun()
                 
                 st.info(f"Subtotal: R$ {subtotal_rv_br:,.2f} | Soma Alvos Internos: {soma_alvos_internos:.1f}%")
             else:
@@ -985,7 +994,16 @@ elif menu == "💼 9. Minha Carteira":
                     alvo_micro = carteira["alvos_ativos"]["rv_us"].get(tick, 0.0)
                     
                     st.markdown(f"**{tick}**: {atual_micro:.1f}% (Alvo: {alvo_micro:.1f}%) ➔ {cor_alvo(atual_micro, alvo_micro)}")
-                    st.caption(f"{qtd} ações | Total: US$ {valor_total_usd:,.2f}")
+                    
+                    c1, c2 = st.columns([3, 2])
+                    with c1:
+                        st.caption(f"Total: US$ {valor_total_usd:,.2f}")
+                    with c2:
+                        nova_qtd = st.number_input("Qtd", min_value=0.0, value=float(qtd), step=1.0, key=f"edit_us_{tick}", label_visibility="collapsed")
+                        if nova_qtd != float(qtd):
+                            carteira["rv_us"][tick] = nova_qtd
+                            salvar_json("carteira.json", carteira)
+                            st.rerun()
                 
                 st.info(f"Subtotal: US$ {subtotal_us_usd:,.2f} (~R$ {subtotal_us_brl:,.2f}) | Soma Alvos Internos: {soma_alvos_internos:.1f}%")
             else:
