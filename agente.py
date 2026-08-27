@@ -3,6 +3,7 @@ import os
 import time
 import json
 import uuid
+import glob
 import pandas as pd
 import plotly.express as px
 from datetime import datetime
@@ -20,7 +21,6 @@ import yfinance as yf
 
 def carregar_chave_api():
     """Verifica o arquivo JSON local primeiro; se não achar (nuvem), usa o st.secrets"""
-    # 1. Tenta ler o JSON local primeiro (Ambiente de Desenvolvimento)
     if os.path.exists("secrets.json"):
         try:
             with open("secrets.json", "r", encoding="utf-8") as f:
@@ -29,7 +29,6 @@ def carregar_chave_api():
         except Exception:
             return "CHAVE_NAO_ENCONTRADA"
             
-    # 2. Se não encontrar o JSON (Ambiente de Nuvem), busca no Streamlit Cloud
     try:
         if "API_GEMINI" in st.secrets:
             return st.secrets["API_GEMINI"]
@@ -51,7 +50,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Mantemos apenas o ajuste do espaçamento superior para aproveitar melhor a tela
 st.markdown("""
 <style>
     .block-container {
@@ -65,7 +63,7 @@ st.markdown("""
 # ESTRUTURA DE DIRETÓRIOS E ARQUIVOS JSON
 # ==========================================
 
-PASTAS = ["pdfs_balancos", "pdfs_filosofia", "Legenda"]
+PASTAS = ["pdfs_balancos", "pdfs_filosofia", "Legenda", "Historico"]
 for p in PASTAS:
     os.makedirs(p, exist_ok=True)
 
@@ -74,18 +72,45 @@ ARQUIVOS_JSON = {
     "conhecimento.json": {},
     "gastos.json": [],
     "ideias.json": [],
-    "carteira.json": {
-        "rv_br": {},
-        "rv_us": {},
-        "rf_br": {},
-        "btc": 0.0
-    }
 }
 
 for json_file, default_content in ARQUIVOS_JSON.items():
     if not os.path.exists(json_file):
         with open(json_file, 'w', encoding='utf-8') as f:
             json.dump(default_content, f, ensure_ascii=False, indent=4)
+
+# Inicialização inteligente da carteira buscando o backup mais recente na pasta Historico
+def inicializar_carteira():
+    padrao_busca = os.path.join("Historico", "*.json")
+    arquivos_historico = glob.glob(padrao_busca)
+    
+    if arquivos_historico:
+        # Pega o arquivo mais recente com base na data de modificação
+        arquivo_mais_recente = max(arquivos_historico, key=os.path.getmtime)
+        try:
+            with open(arquivo_mais_recente, "r", encoding="utf-8") as f:
+                dados_recente = json.load(f)
+                # Salva como o carteira.json ativo do sistema
+                with open("carteira.json", "w", encoding="utf-8") as f_ativo:
+                    json.dump(dados_recente, f_ativo, ensure_ascii=False, indent=4)
+                return
+        except Exception:
+            pass
+
+    # Fallback caso a pasta Historico esteja vazia
+    if not os.path.exists("carteira.json"):
+        default_carteira = {
+            "rv_br": {},
+            "rv_us": {},
+            "rf_br": {},
+            "btc": 0.0,
+            "alvos_macro": {"rv_br": 45.0, "rv_us": 45.0, "rf_br": 0.0, "btc": 10.0},
+            "alvos_ativos": {"rv_br": {}, "rv_us": {}}
+        }
+        with open("carteira.json", "w", encoding="utf-8") as f:
+            json.dump(default_carteira, f, ensure_ascii=False, indent=4)
+
+inicializar_carteira()
 
 # ==========================================
 # FUNÇÕES AUXILIARES E MOTOR DE IA
@@ -106,10 +131,7 @@ def chamar_gemini_com_retry(prompt, forcar_json=False, status_container=None, ma
     modelos_fallback = [MODELO_GEMINI, "gemini-3.6-flash", "gemini-2.5-flash", "gemini-1.5-pro"]
     client = genai.Client(api_key=API_GEMINI)
     
-    # Se a função for chamada sem um container visual, cria um temporário
     log_container = status_container if status_container else st.empty()
-    
-    # Configura o retorno estrito em JSON apenas quando a aplicação exigir
     config = types.GenerateContentConfig(response_mime_type="application/json") if forcar_json else None
     
     for modelo in modelos_fallback:
@@ -128,7 +150,6 @@ def chamar_gemini_com_retry(prompt, forcar_json=False, status_container=None, ma
                 
             except Exception as e:
                 erro_str = str(e)
-                # Verifica se é erro de sobrecarga ou limite de requisições da API
                 if "503" in erro_str or "429" in erro_str:
                     log_container.warning(f"⚠️ **{modelo}** sobrecarregado. Aguardando...")
                     if tentativa < max_tentativas_por_modelo - 1:
@@ -137,7 +158,6 @@ def chamar_gemini_com_retry(prompt, forcar_json=False, status_container=None, ma
                     else: 
                         break 
                 else:
-                    # Para erros irreversíveis (como modelo não existente ou chave errada), pula de modelo na hora
                     log_container.error(f"❌ Erro no **{modelo}**... Pulando.")
                     time.sleep(2) 
                     break 
@@ -147,7 +167,6 @@ def chamar_gemini_com_retry(prompt, forcar_json=False, status_container=None, ma
 def raspar_dados_statusinvest(ticker, base_variavel, log_container=None, is_etf_us=False):
     eh_br = any(char.isdigit() for char in ticker)
     
-    # Define a URL baseada na marcação do usuário ou no formato do ticker
     if is_etf_us:
         url = f"https://statusinvest.com.br/etf/eua/{ticker.lower()}" 
     else:
@@ -195,22 +214,21 @@ def raspar_dados_statusinvest(ticker, base_variavel, log_container=None, is_etf_
     finally:
         driver.quit()
 
-@st.cache_data(ttl=300) # Cache de 5 minutos para não bombardear o Yahoo Finance
+@st.cache_data(ttl=300)
 def obter_cotacao(ticker, is_br=True):
     try:
-        # Se for BR, o Yahoo Finance exige o sufixo .SA
         simbolo = f"{ticker}.SA" if is_br else ticker
         ticker_obj = yf.Ticker(simbolo)
         return ticker_obj.fast_info['lastPrice']
     except:
         return 0.0
 
-@st.cache_data(ttl=3600) # Câmbio muda menos, cache de 1 hora
+@st.cache_data(ttl=3600)
 def obter_cambio_usd_brl():
     try:
         return yf.Ticker("USDBRL=X").fast_info['lastPrice']
     except:
-        return 5.50 # Valor de fallback seguro
+        return 5.50
 
 # ==========================================
 # MENU LATERAL LIMPO
@@ -408,9 +426,6 @@ elif menu == "🏢 5. Visualizar Empresas":
     st.header("🏢 Diretório de Empresas Cadastradas")
     base_var = carregar_json("base_conhecimento_variavel.json")
 
-    # ---------------------------------------------------------
-    # BACKUP E RESTAURAÇÃO DA BASE DE EMPRESAS
-    # ---------------------------------------------------------
     with st.expander("💾 Backup & Restauração de Empresas", expanded=False):
         st.write("Salve uma cópia de segurança da sua base de empresas raspadas ou faça o upload de um arquivo local para a nuvem.")
         col_b1, col_b2 = st.columns(2, gap="large")
@@ -437,7 +452,6 @@ elif menu == "🏢 5. Visualizar Empresas":
                         conteudo_emp = arquivo_upload_empresas.getvalue().decode("utf-8")
                         dados_restaurados_emp = json.loads(conteudo_emp)
                         
-                        # Verifica se é um dicionário (formato padrão da base)
                         if isinstance(dados_restaurados_emp, dict):
                             salvar_json("base_conhecimento_variavel.json", dados_restaurados_emp)
                             sucesso_emp = True
@@ -669,7 +683,6 @@ elif menu == "💼 9. Minha Carteira":
     st.header("💼 Minha Carteira Alvo (#PAS)")
     
     def atualizar_quantidade(classe, ticker, key_widget):
-        """Atualiza o JSON no momento exato em que o usuário digita na caixinha"""
         nova_qtd = st.session_state[key_widget]
         carteira_temp = carregar_json("carteira.json")
         carteira_temp[classe][ticker] = nova_qtd
@@ -686,9 +699,6 @@ elif menu == "💼 9. Minha Carteira":
     opcoes_br = [t for t in base_var.keys() if any(c.isdigit() for c in t)]
     opcoes_us = [t for t in base_var.keys() if not any(c.isdigit() for c in t)]
     
-    # ---------------------------------------------------------
-    # PAINEL 1: CONFIGURAR ALVOS MACRO
-    # ---------------------------------------------------------
     with st.expander("🎯 Configurar Alvos Macro (Grandes Áreas)", expanded=False):
         st.write("Defina o percentual ideal de cada classe. A soma deve ser exatamente 100%.")
         col_m1, col_m2, col_m3, col_m4 = st.columns(4)
@@ -713,9 +723,6 @@ elif menu == "💼 9. Minha Carteira":
                 salvar_json("carteira.json", carteira)
                 st.rerun()
 
-    # ---------------------------------------------------------
-    # PAINEL 2: CADASTRAR NOVO ATIVO / DEFINIR ALVO INTERNO
-    # ---------------------------------------------------------
     with st.expander("➕ Cadastrar Novo Ativo ou Ajustar Alvo Interno", expanded=False):
         c_tipo, c_ativo, c_qtd, c_alvo, c_btn = st.columns([2, 2, 1.5, 1.5, 1])
         
@@ -763,9 +770,6 @@ elif menu == "💼 9. Minha Carteira":
                     time.sleep(0.5)
                     st.rerun()
 
-    # ---------------------------------------------------------
-    # PAINEL 3: FAZER APORTE
-    # ---------------------------------------------------------
     with st.expander("💸 Fazer Aporte (Registrar Compra)", expanded=False):
         st.write("Acabou de comprar? Registre aqui a quantidade física de ativos adquiridos para somar à sua carteira.")
         a_tipo, a_ativo, a_qtd, a_btn = st.columns([2, 2, 1.5, 1.5])
@@ -810,9 +814,6 @@ elif menu == "💼 9. Minha Carteira":
                 elif qtd_comprada <= 0:
                     st.warning("Insira uma quantidade maior que zero.")
 
-    # ---------------------------------------------------------
-    # PAINEL 4: BACKUP E RESTAURAÇÃO DA CARTEIRA
-    # ---------------------------------------------------------
     with st.expander("💾 Backup & Restauração", expanded=False):
         st.write("Salve uma cópia de segurança de toda a sua configuração de carteira ou restaure um arquivo antigo.")
         col_b1, col_b2 = st.columns(2, gap="large")
@@ -854,9 +855,6 @@ elif menu == "💼 9. Minha Carteira":
 
     st.divider()
 
-    # ---------------------------------------------------------
-    # PRÉ-CÁLCULO FINANCEIRO
-    # ---------------------------------------------------------
     usd_rate = obter_cambio_usd_brl()
     
     subtotal_rv_br = 0.0
@@ -886,9 +884,6 @@ elif menu == "💼 9. Minha Carteira":
     
     total_patrimonio = subtotal_rv_br + subtotal_us_brl + subtotal_rf + subtotal_btc
 
-    # ---------------------------------------------------------
-    # GRÁFICOS VISUAIS: ALVO VS ATUAL
-    # ---------------------------------------------------------
     st.markdown(f"<h2 style='text-align: center; color: #0284c7;'>Patrimônio Total: R$ {total_patrimonio:,.2f}</h2>", unsafe_allow_html=True)
     st.write("")
     
@@ -923,9 +918,6 @@ elif menu == "💼 9. Minha Carteira":
 
     st.divider()
 
-    # ---------------------------------------------------------
-    # DASHBOARD DETALHADO (Semáforo e Gráficos Internos)
-    # ---------------------------------------------------------
     def cor_alvo(atual, alvo):
         if atual < alvo - 1.0: return "🔴 Para trás (Aportar)"
         elif atual > alvo + 1.0: return "🟡 Acima do Alvo"
@@ -934,7 +926,6 @@ elif menu == "💼 9. Minha Carteira":
     col_rv, col_us = st.columns(2, gap="large")
     col_rf, col_btc = st.columns(2, gap="large")
 
-    # BLOCO 1: Renda Variável BR
     with col_rv:
         with st.container(border=True):
             atual_macro = (subtotal_rv_br / total_patrimonio * 100) if total_patrimonio > 0 else 0.0
@@ -958,7 +949,6 @@ elif menu == "💼 9. Minha Carteira":
                     df_br_atual.append({"Ativo": tick, "Valor": valor_total})
                     df_br_alvo.append({"Ativo": tick, "Percentual": alvo_micro})
                 
-                # Gráfico Interno BR
                 if visao_br == "Atual (Em R$)":
                     fig_br = px.pie(pd.DataFrame(df_br_atual), values="Valor", names="Ativo", hole=0.55)
                 else:
@@ -970,7 +960,6 @@ elif menu == "💼 9. Minha Carteira":
                 
                 st.divider()
                 
-                # Detalhamento em Texto com edição instantânea
                 for tick, qtd in carteira["rv_br"].items():
                     valor_total = precos_br[tick] * qtd
                     atual_micro = (valor_total / subtotal_rv_br * 100) if subtotal_rv_br > 0 else 0.0
@@ -990,7 +979,6 @@ elif menu == "💼 9. Minha Carteira":
             else:
                 st.write("Nenhum ativo.")
 
-    # BLOCO 2: Exterior
     with col_us:
         with st.container(border=True):
             atual_macro = (subtotal_us_brl / total_patrimonio * 100) if total_patrimonio > 0 else 0.0
@@ -1014,7 +1002,6 @@ elif menu == "💼 9. Minha Carteira":
                     df_us_atual.append({"Ativo": tick, "Valor": valor_total_usd})
                     df_us_alvo.append({"Ativo": tick, "Percentual": alvo_micro})
                 
-                # Gráfico Interno Exterior
                 if visao_us == "Atual (Em US$)":
                     fig_us = px.pie(pd.DataFrame(df_us_atual), values="Valor", names="Ativo", hole=0.55)
                 else:
@@ -1026,7 +1013,6 @@ elif menu == "💼 9. Minha Carteira":
                 
                 st.divider()
                 
-                # Detalhamento em Texto com edição instantânea
                 for tick, qtd in carteira["rv_us"].items():
                     valor_total_usd = precos_us[tick] * qtd
                     atual_micro = (valor_total_usd / subtotal_us_usd * 100) if subtotal_us_usd > 0 else 0.0
@@ -1046,7 +1032,6 @@ elif menu == "💼 9. Minha Carteira":
             else:
                 st.write("Nenhum ativo.")
 
-    # BLOCO 3: Renda Fixa BR
     with col_rf:
         with st.container(border=True):
             atual_macro = (subtotal_rf / total_patrimonio * 100) if total_patrimonio > 0 else 0.0
@@ -1062,7 +1047,6 @@ elif menu == "💼 9. Minha Carteira":
             else:
                 st.write("Nenhum ativo.")
 
-    # BLOCO 4: Bitcoin
     with col_btc:
         with st.container(border=True):
             atual_macro = (subtotal_btc / total_patrimonio * 100) if total_patrimonio > 0 else 0.0
