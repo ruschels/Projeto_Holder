@@ -110,7 +110,10 @@ def inicializar_carteira():
         with open("carteira.json", "w", encoding="utf-8") as f:
             json.dump(default_carteira, f, ensure_ascii=False, indent=4)
 
-inicializar_carteira()
+# Garante que o backup do Historico seja puxado apenas ao ligar o app, e não a cada clique
+if 'carteira_carregada' not in st.session_state:
+    inicializar_carteira()
+    st.session_state.carteira_carregada = True
 
 # ==========================================
 # FUNÇÕES AUXILIARES E MOTOR DE IA
@@ -740,7 +743,7 @@ elif menu == "💼 9. Minha Carteira":
                 ativo_selecionado = st.text_input("Ativo", value="BTC", disabled=True, key="ativo_cad_btc")
                 
         with c_qtd:
-            qtd_inserida = st.number_input("Qtd Inicial", min_value=0.0, step=1.0, key="qtd_cad")
+            qtd_inserida = st.number_input("Qtd Inicial", min_value=0.0, step=0.0001, format="%0.4f", key="qtd_cad")
             
         with c_alvo:
             if tipo_alocacao in ["Renda Variável BR", "Exterior"]:
@@ -791,7 +794,7 @@ elif menu == "💼 9. Minha Carteira":
                 ativo_aporte = st.text_input("Cripto", value="BTC", disabled=True, key="ativo_apo_btc")
                 
         with a_qtd:
-            qtd_comprada = st.number_input("Quantidade Comprada", min_value=0.0, step=1.0, help="Quantidade física.", key="qtd_apo")
+            qtd_comprada = st.number_input("Quantidade Comprada", min_value=0.0, step=0.0001, format="%0.4f", help="Quantidade física.", key="qtd_apo")
             
         with a_btn:
             st.write("") 
@@ -971,7 +974,7 @@ elif menu == "💼 9. Minha Carteira":
                         st.caption(f"Total: R$ {valor_total:,.2f}")
                     with c2:
                         chave = f"w_br_{tick}"
-                        st.number_input("Qtd", min_value=0.0, value=float(qtd), step=1.0, key=chave, 
+                        st.number_input("Qtd", min_value=0.0, value=float(qtd), step=0.0001, format="%0.4f", key=chave, 
                                         on_change=atualizar_quantidade, args=("rv_br", tick, chave), 
                                         label_visibility="collapsed")
                 
@@ -1024,7 +1027,7 @@ elif menu == "💼 9. Minha Carteira":
                         st.caption(f"Total: US$ {valor_total_usd:,.2f}")
                     with c2:
                         chave = f"w_us_{tick}"
-                        st.number_input("Qtd", min_value=0.0, value=float(qtd), step=1.0, key=chave, 
+                        st.number_input("Qtd", min_value=0.0, value=float(qtd), step=0.0001, format="%0.4f", key=chave, 
                                         on_change=atualizar_quantidade, args=("rv_us", tick, chave), 
                                         label_visibility="collapsed")
                 
