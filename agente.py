@@ -38,7 +38,7 @@ def carregar_chave_api():
     return "CHAVE_NAO_ENCONTRADA"
 
 API_GEMINI = carregar_chave_api()
-MODELO_GEMINI = "gemini-3.6-flash"
+MODELO_GEMINI = "gemini-flash-latest"
 
 # ==========================================
 # CONFIGURAÇÕES DA PÁGINA (DESIGN NATIVO)
@@ -131,7 +131,7 @@ def salvar_json(caminho, dados):
         json.dump(dados, f, ensure_ascii=False, indent=4)
 
 def chamar_gemini_com_retry(prompt, forcar_json=False, status_container=None, max_tentativas_por_modelo=3, delay_segundos=4):
-    modelos_fallback = [MODELO_GEMINI, "gemini-3.6-flash", "gemini-2.5-flash", "gemini-1.5-pro"]
+    modelos_fallback = [MODELO_GEMINI, "gemini-3.6-flash", "gemini-2.5-flash"]
     client = genai.Client(api_key=API_GEMINI)
     
     log_container = status_container if status_container else st.empty()

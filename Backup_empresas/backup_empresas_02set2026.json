@@ -328,15 +328,5 @@
         "resumo_numeros": "P/L: 16,34 | P/VP: 4,66 | Dividend Yield: 3,53% | ROE: 28,49% | Margem Líquida: 44,41% | Margem EBITDA: 85,00% | Dívida Líquida/EBITDA: -0,15 (Caixa Líquido) | CAGR Lucros (5 anos): 5,12%",
         "pontos_de_atencao": "P/VP elevado e forte dependência do volume de negociações no mercado de capitais e dos ciclos de taxa de juros.",
         "observacao": ""
-    },
-    "BBDC3": {
-        "nome_empresa": "Banco Bradesco S.A.",
-        "setor": "Financeiro e Outros / Intermediários Financeiros / Bancos",
-        "tem_acao_ordinaria_ON": true,
-        "lucros_consistentes": true,
-        "divida_equilibrada": true,
-        "resumo_numeros": "P/L: 6,72; P/VP: 0,91; Dividend Yield: 9,11%; ROE: 13,56%; LPA: R$ 2,32; VPA: R$ 17,11; CAGR Lucros 5 anos: 8,93%; CAGR Receitas 5 anos: 22,38%; Tag Along: 100%.",
-        "pontos_de_atencao": "Por ser uma instituição financeira, métricas convencionais de endividamento (Dívida Líquida/EBITDA) não se aplicam, exigindo atenção à inadimplência e provisões (PDD); ROE abaixo da média histórica anterior do banco; listagem no segmento Nível 1 de governança corporativa.",
-        "observacao": ""
     }
 }
